@@ -23,16 +23,10 @@ function App() {
     // GDP per capita (avoiding countries with small pop)
   const getVal = feat => feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
 
-  const maxVal = useMemo(
-    () => Math.max(...countryjson.features.map(getVal)),
-    [countryjson]
-  );
-  colorScale.domain([0, maxVal]);
-
-
   const cData = require('./countryjson.json')
   const alpha2Data = require('./alpha2country.json')
 
+  // should just call these on button press not every render
   const mappedalpha2 = heightData
     .map((hd) => {
       const alpha2D = alpha2Data.find((a2d) => {
@@ -43,6 +37,18 @@ function App() {
       }
     })
     .filter((v) => v)
+
+    const getAvgHeight = a2 => { 
+      let maleOrFemale = isFemale ? "Female Height in Ft" : "Male Height in Ft"
+      let avgHeight = mappedalpha2.find(a => a?.alpha2 === a2)?.[maleOrFemale];
+      return avgHeight;
+    }
+  
+    const maxVal = useMemo(
+      () => Math.max(...countryjson.features.map(getVal)),
+      [countryjson]
+    );
+    colorScale.domain([0, maxVal]);
 
   console.log({ mappedalpha2 })
 
@@ -105,7 +111,7 @@ function App() {
         lineHoverPrecision={0}
         polygonsData={countryjson.features.filter(d => countriesYouAreTaller.find(a => a === d.properties.ISO_A2))}
         polygonAltitude={d => d === hoverD ? 0.12 : 0.06}
-        polygonCapColor={d => d === hoverD ? 'steelblue' : colorScale(getVal(d))}
+        polygonCapColor={d => d === hoverD ? 'steelblue' : colorScale(getVal(d))}// colorScale(getAvgHeight(d.properties.ISO_A2))}
         polygonSideColor={() => 'rgba(0, 100, 0, 0.15)'}
         polygonStrokeColor={() => '#111'}
         polygonLabel={({ properties: d }) => {
@@ -115,6 +121,7 @@ function App() {
         <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
           Avg Height: <i>${avgHeight}</i>
       `)} }
+        onPolygonHover={setHoverD}
         polygonsTransitionDuration={300}
         />
       </header>
