@@ -88,6 +88,9 @@ function App() {
         </form>
         <button onClick={() => handlePress(feet, inches)} className="button" style={{verticalAlign:"middle"}}><span>Where am I tall? </span></button>
         <div>
+          {countriesYouAreTaller.length > 0 && 
+           <div>You are tall somewhere!</div>}
+            
         {/* {countriesYouAreTaller.length > 0 &&
             countriesYouAreTaller.map((country: any, index: number) => {
               let countryFullName = mappedalpha2.find(a => a?.alpha2 === country)?.['Country Name']
@@ -105,9 +108,9 @@ function App() {
         polygonCapColor={d => d === hoverD ? 'steelblue' : colorScale(getVal(d))}
         polygonSideColor={() => 'rgba(0, 100, 0, 0.15)'}
         polygonStrokeColor={() => '#111'}
-        // add average height to label
         polygonLabel={({ properties: d }) => {
-          let avgHeight = mappedalpha2.find(a => a?.alpha2 === d.ISO_A2)?.['Male Height in Ft'];
+          let maleOrFemale = isFemale ? "Female Height in Ft" : "Male Height in Ft"
+          let avgHeight = mappedalpha2.find(a => a?.alpha2 === d.ISO_A2)?.[maleOrFemale];
           return (`
         <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
           Avg Height: <i>${avgHeight}</i>
