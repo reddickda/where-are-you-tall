@@ -1,9 +1,11 @@
 import './App.css';
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import React from 'react';
 import { calculateHeight } from './calculator.js'
 import * as d3 from 'd3'
 import { heightData } from "./heightData.js";
+import Globe from 'react-globe.gl'
+let countryjson = require('./countryjson.json');
 
 // TODO https://github.com/vasturiano/react-globe.gl/blob/master/example/choropleth-countries/index.html
   // use react globe.gl choropleth-countries example to create polygons over top countries
@@ -13,11 +15,21 @@ function App() {
   const [feet, setFeet] = useState('')
   const [inches, setInches] = useState('')
   const [countriesYouAreTaller, setCountries] = useState<string[]>([])
-  const [polyGonDataTaller, setPolyGonDataTaller] = useState()
   const [isFemale, setIsFemale] = useState(false)
   const [hoverD, setHoverD] = useState()
-  const toggleSwitch = () => setIsFemale((previousState) => !previousState)
-  
+
+  const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
+
+    // GDP per capita (avoiding countries with small pop)
+  const getVal = feat => feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
+
+  const maxVal = useMemo(
+    () => Math.max(...countryjson.features.map(getVal)),
+    [countryjson]
+  );
+  colorScale.domain([0, maxVal]);
+
+
   const cData = require('./countryjson.json')
   const alpha2Data = require('./alpha2country.json')
 
@@ -53,6 +65,10 @@ function App() {
         <p>
           Find out where in the world you are tall.
         </p>
+        <div>
+          <button onClick={() => setIsFemale(false)} style={{backgroundColor: isFemale ? "#1d68d1" : "#1dd19b"}} className="maleFemaleButton" ><span>Male </span></button>
+          <button onClick={() => setIsFemale(true)} style={{backgroundColor: isFemale ? "#1dd19b" : "#1d68d1"}} className="maleFemaleButton" ><span>Female </span></button>
+        </div>
         <form>
           <div>
             Enter your height:
@@ -72,12 +88,32 @@ function App() {
         </form>
         <button onClick={() => handlePress(feet, inches)} className="button" style={{verticalAlign:"middle"}}><span>Where am I tall? </span></button>
         <div>
-        {countriesYouAreTaller.length > 0 &&
+        {/* {countriesYouAreTaller.length > 0 &&
             countriesYouAreTaller.map((country: any, index: number) => {
               let countryFullName = mappedalpha2.find(a => a?.alpha2 === country)?.['Country Name']
               return <p key={index}>{countryFullName}</p>
-            })}
+            })} */}
         </div>
+        <Globe
+        width={500}
+        height={500}
+        backgroundColor="rgb(59, 62, 63)"
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+        lineHoverPrecision={0}
+        polygonsData={countryjson.features.filter(d => countriesYouAreTaller.find(a => a === d.properties.ISO_A2))}
+        polygonAltitude={d => d === hoverD ? 0.12 : 0.06}
+        polygonCapColor={d => d === hoverD ? 'steelblue' : colorScale(getVal(d))}
+        polygonSideColor={() => 'rgba(0, 100, 0, 0.15)'}
+        polygonStrokeColor={() => '#111'}
+        // add average height to label
+        polygonLabel={({ properties: d }) => {
+          let avgHeight = mappedalpha2.find(a => a?.alpha2 === d.ISO_A2)?.['Male Height in Ft'];
+          return (`
+        <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
+          Avg Height: <i>${avgHeight}</i>
+      `)} }
+        polygonsTransitionDuration={300}
+        />
       </header>
     </div>
   );

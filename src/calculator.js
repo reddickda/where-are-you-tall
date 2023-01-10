@@ -1,13 +1,12 @@
 import { heightData } from "./heightData.js";
 
-export const calculateHeight = (feet, inches, isMale) => {
+export const calculateHeight = (feet, inches, isFemale) => {
 
     let heightInCm = feet*30.48;
     heightInCm += inches*2.54
-
-    // TODO return alpha2
+    
     const countries = heightData.map((data) => {
-        if(isMale){
+        if(!isFemale){
             if(data["Male Height in Cm"] < heightInCm) {
                 return data.alpha2
             }
