@@ -1,7 +1,6 @@
-import { heightData } from "./heightData.js";
+import { heightData } from "./Utility/heightData.js";
 
 export const calculateHeight = (feet, inches, isFemale) => {
-
     let heightInCm = feet*30.48;
     heightInCm += inches*2.54
     
