@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/github.io/where-are-you-tall/static/css/main.8f9c7690.css",
+    "main.js": "/github.io/where-are-you-tall/static/js/main.b6d5afab.js",
+    "index.html": "/github.io/where-are-you-tall/index.html",
+    "main.8f9c7690.css.map": "/github.io/where-are-you-tall/static/css/main.8f9c7690.css.map",
+    "main.b6d5afab.js.map": "/github.io/where-are-you-tall/static/js/main.b6d5afab.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8f9c7690.css",
+    "static/js/main.b6d5afab.js"
+  ]
+}
