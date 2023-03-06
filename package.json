@@ -1,7 +1,7 @@
 {
   "name": "where-are-you-tall",
   "version": "0.1.0",
-  "homepage": "https://reddickda/github.io/where-are-you-tall",
+  "homepage": "https://reddickda.github.io/where-are-you-tall",
   "private": true,
   "dependencies": {
     "@types/jest": "^29.2.5",
