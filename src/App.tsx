@@ -10,10 +10,6 @@ import { heightData } from "./Utility/heightData.js";
 
 let countryjson = require('./countryjson.json');
 
-// TODO https://github.com/vasturiano/react-globe.gl/blob/master/example/choropleth-countries/index.html
-// use react globe.gl choropleth-countries example to create polygons over top countries
-// map country name to iso a2 code (alpha2)
-
 function App() {
   const [feet, setFeet] = useState<number | ''>(0)
   const [inches, setInches] = useState<number | ''>(0)
@@ -21,18 +17,11 @@ function App() {
   const [isFemale, setIsFemale] = useState(false)
   const [hoverD, setHoverD] = useState()
 
-  const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
+  const colorScale = d3.scaleSequentialSqrt(d3.interpolateGreens);
 
-  // GDP per capita (avoiding countries with small pop)
-  // Get avg height based on the iso 2 from our country data
-  const getVal = feat => { console.log(feat); const avgHeight = heightData['alpha2'] === feat.propert9ies.ISO_A2; return avgHeight};
+  const getVal = feat => isFemale ? heightData.find(x => x.alpha2 === feat.properties.ISO_A2)?.['Female Height in Ft'] : heightData.find(x => x.alpha2 === feat.properties.ISO_A2)?.['Male Height in Ft'];
 
-  const maxVal = useMemo(
-    () => Math.max(...countryjson.features.map(getVal)),
-    [countryjson]
-  );
-
-  colorScale.domain([0, maxVal]);
+  isFemale ? colorScale.domain([4.95, 5.8]) : colorScale.domain([5.5, 6.15]);
 
   const handlePress = (feet: number | '', inches: number | '') => {
     const countries = calculateHeight(feet, inches, isFemale).filter(v => v !== "")
@@ -55,34 +44,29 @@ function App() {
           </Grid.Col>
         </Grid>
         <form>
-          <Stack pt={20} pb={10}>
+          <Stack pt={20} pb={20}>
             <Card>
               Enter your height:
               <Grid>
                 <Grid.Col>
-                  <NumberInput value={feet} onChange={setFeet} label='Feet' defaultValue={''} />
+                  <NumberInput min={0} max={8} value={feet} onChange={setFeet} label='Feet' defaultValue={''} />
                 </Grid.Col>
                 <Grid.Col>
-                  <NumberInput value={inches} onChange={setInches} label='Inches' defaultValue={''} />
+                  <NumberInput min={0} max={11.9} value={inches} onChange={setInches} label='Inches' defaultValue={''} />
                 </Grid.Col>
               </Grid>
             </Card>
           </Stack>
         </form>
-        <Button style={{ backgroundColor: "#124182"}} onClick={() => handlePress(feet, inches)}>Where am I tall?</Button>
-        <div>
-          {countriesYouAreTaller.length > 0 ?
+        <Button size={'lg'} style={{ backgroundColor: "#124182" }} onClick={() => handlePress(feet, inches)}>Where am I tall?</Button>
+        <Stack pb={20} pt={10}>
+          {countriesYouAreTaller.length === heightData.length ? <div>Congratulations, you are tall everywhere!</div> : countriesYouAreTaller.length > 0 ?
             <div>You are tall somewhere!</div> : <div>You are not tall anywhere...</div>}
-          {/* {countriesYouAreTaller.length > 0 &&
-            countriesYouAreTaller.map((country: any, index: number) => {
-              let countryFullName = mappedalpha2.find(a => a?.alpha2 === country)?.['Country Name']
-              return <p key={index}>{countryFullName}</p>
-            })} */}
-        </div>
+        </Stack>
         <Globe
           width={500}
           height={500}
-          backgroundColor="rgb(59, 62, 63)"
+          backgroundColor="#282c34"
           globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
           lineHoverPrecision={0}
           polygonsData={countryjson.features.filter(d => countriesYouAreTaller.find(a => a === d.properties.ISO_A2))}
@@ -101,6 +85,7 @@ function App() {
           onPolygonHover={setHoverD}
           polygonsTransitionDuration={300}
         />
+        <h5>Contact<h6>reddickdav@gmail.com</h6></h5>
       </header>
     </Stack>
   );
