@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/where-are-you-tall/static/css/main.ba235bdd.css",
-    "main.js": "/where-are-you-tall/static/js/main.b7e1e89c.js",
-    "index.html": "/where-are-you-tall/index.html",
-    "main.ba235bdd.css.map": "/where-are-you-tall/static/css/main.ba235bdd.css.map",
-    "main.b7e1e89c.js.map": "/where-are-you-tall/static/js/main.b7e1e89c.js.map"
+    "main.css": "/static/css/main.ba235bdd.css",
+    "main.js": "/static/js/main.b7e1e89c.js",
+    "index.html": "/index.html",
+    "main.ba235bdd.css.map": "/static/css/main.ba235bdd.css.map",
+    "main.b7e1e89c.js.map": "/static/js/main.b7e1e89c.js.map"
   },
   "entrypoints": [
     "static/css/main.ba235bdd.css",
