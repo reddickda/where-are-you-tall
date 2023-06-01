@@ -1,9 +1,9 @@
 import './App.css';
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import React from 'react';
 import { calculateHeight } from './calculator.js'
 import * as d3 from 'd3'
-import { Button, Card, Grid, Stack, NumberInput } from '@mantine/core';
+import { Button, Center, Card, Grid, Stack, NumberInput } from '@mantine/core';
 import { mappedalpha2 } from './Utility/mappedAlpha2';
 import Globe from 'react-globe.gl'
 import { heightData } from "./Utility/heightData.js";
@@ -36,23 +36,23 @@ function App() {
           Find out where in the world you are tall.
         </p>
         <Grid>
-          <Grid.Col sm={6} xs={12}>
+          <Grid.Col span={6}>
             <Button size={'lg'} onClick={() => setIsFemale(false)} style={{ boxShadow: isFemale ? undefined : '2px 1px 1px black', backgroundColor: isFemale ? "#124182" : "#008040" }}>Male</Button>
           </Grid.Col>
-          <Grid.Col sm={6} xs={12}>
+          <Grid.Col span={6}>
             <Button size={'lg'} onClick={() => setIsFemale(true)} style={{ boxShadow: isFemale ? '2px 1px 1px black' : undefined, backgroundColor: isFemale ? "#008040" : "#124182" }}>Female</Button>
           </Grid.Col>
         </Grid>
         <form>
           <Stack pt={20} pb={20}>
-            <Card>
-              Enter your height:
+            <Card sx={{ backgroundColor: '#282c34', color: 'white'}}>
+              <Center>Enter your height:</Center>
               <Grid>
                 <Grid.Col>
-                  <NumberInput min={0} max={8} value={feet} onChange={setFeet} label='Feet' defaultValue={''} />
+                  <NumberInput styles={{ label: { color: 'white'}}} min={0} max={8} value={feet} onChange={setFeet} label='Feet' defaultValue={''} />
                 </Grid.Col>
                 <Grid.Col>
-                  <NumberInput min={0} max={11.9} value={inches} onChange={setInches} label='Inches' defaultValue={''} />
+                  <NumberInput styles={{ label: { color: 'white'}}} min={0} max={11.9} value={inches} onChange={setInches} label='Inches' defaultValue={''} />
                 </Grid.Col>
               </Grid>
             </Card>

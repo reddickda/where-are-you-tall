@@ -423,6 +423,15 @@ export const heightData = [
         "alpha2": "LC"
     },
     {
+        "Rank": 51,
+        "Country Name": "Ivory Coast",
+        "Male Height in Cm": 170.1,
+        "Female Height in Cm": 159.1,
+        "Male Height in Ft": 5.5807087,
+        "Female Height in Ft": 5.21,
+        "alpha2": "CI"
+    },
+    {
         "Rank": 52,
         "Country Name": "North Macedonia",
         "Male Height in Cm": 176.43,
@@ -943,6 +952,15 @@ export const heightData = [
         "Male Height in Ft": 5.63,
         "Female Height in Ft": 5.19,
         "alpha2": "NG"
+    },
+    {
+        "Rank": 130,
+        "Country Name": "Niger",
+        "Male Height in Cm": 170.3,
+        "Female Height in Cm": 165.0,
+        "Male Height in Ft": 5.7,
+        "Female Height in Ft": 5.3,
+        "alpha2": "NE"
     },
     {
         "Rank": 122,
