@@ -1,5 +1,14 @@
 export const heightData = [
     {
+        "Rank": 1,
+        "Country Name": "Netherlands",
+        "Male Height in Cm": 183.8,
+        "Female Height in Cm": 169.96,
+        "Male Height in Ft": 6.01,
+        "Female Height in Ft": 5.58,
+        "alpha2": "ME"
+    },
+    {
         "Rank": 2,
         "Country Name": "Montenegro",
         "Male Height in Cm": 183.3,
@@ -376,6 +385,15 @@ export const heightData = [
         "Male Height in Ft": 5.81,
         "Female Height in Ft": 5.39,
         "alpha2": "JM"
+    },
+    {
+        "Rank": 47,
+        "Country Name": "United States",
+        "Male Height in Cm": 176.9,
+        "Female Height in Cm": 163.3,
+        "Male Height in Ft": 5.81,
+        "Female Height in Ft": 5.39,
+        "alpha2": "US"
     },
     {
         "Rank": 48,

@@ -3,26 +3,29 @@ import { useState, useMemo } from 'react'
 import React from 'react';
 import { calculateHeight } from './calculator.js'
 import * as d3 from 'd3'
+import { Button, Card, Grid, Stack, NumberInput } from '@mantine/core';
 import { mappedalpha2 } from './Utility/mappedAlpha2';
 import Globe from 'react-globe.gl'
+import { heightData } from "./Utility/heightData.js";
 
 let countryjson = require('./countryjson.json');
 
 // TODO https://github.com/vasturiano/react-globe.gl/blob/master/example/choropleth-countries/index.html
-  // use react globe.gl choropleth-countries example to create polygons over top countries
-  // map country name to iso a2 code (alpha2)
+// use react globe.gl choropleth-countries example to create polygons over top countries
+// map country name to iso a2 code (alpha2)
 
 function App() {
-  const [feet, setFeet] = useState('')
-  const [inches, setInches] = useState('')
+  const [feet, setFeet] = useState<number | ''>(0)
+  const [inches, setInches] = useState<number | ''>(0)
   const [countriesYouAreTaller, setCountriesYouAreTaller] = useState<string[]>([])
   const [isFemale, setIsFemale] = useState(false)
   const [hoverD, setHoverD] = useState()
 
   const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
 
-    // GDP per capita (avoiding countries with small pop)
-  const getVal = feat => feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
+  // GDP per capita (avoiding countries with small pop)
+  // Get avg height based on the iso 2 from our country data
+  const getVal = feat => { console.log(feat); const avgHeight = heightData['alpha2'] === feat.propert9ies.ISO_A2; return avgHeight};
 
   const maxVal = useMemo(
     () => Math.max(...countryjson.features.map(getVal)),
@@ -31,45 +34,46 @@ function App() {
 
   colorScale.domain([0, maxVal]);
 
-  const handlePress = (feet: string, inches: string) => {
+  const handlePress = (feet: number | '', inches: number | '') => {
     const countries = calculateHeight(feet, inches, isFemale).filter(v => v !== "")
 
     setCountriesYouAreTaller(countries)
   }
 
   return (
-    <div className="App">
+    <Stack>
       <header className="App-header">
         <p>
           Find out where in the world you are tall.
         </p>
-        <div>
-          <button onClick={() => setIsFemale(false)} style={{backgroundColor: isFemale ? "#1d68d1" : "#1dd19b"}} className="maleFemaleButton" ><span>Male </span></button>
-          <button onClick={() => setIsFemale(true)} style={{backgroundColor: isFemale ? "#1dd19b" : "#1d68d1"}} className="maleFemaleButton" ><span>Female </span></button>
-        </div>
+        <Grid>
+          <Grid.Col sm={6} xs={12}>
+            <Button size={'lg'} onClick={() => setIsFemale(false)} style={{ boxShadow: isFemale ? undefined : '2px 1px 1px black', backgroundColor: isFemale ? "#124182" : "#008040" }}>Male</Button>
+          </Grid.Col>
+          <Grid.Col sm={6} xs={12}>
+            <Button size={'lg'} onClick={() => setIsFemale(true)} style={{ boxShadow: isFemale ? '2px 1px 1px black' : undefined, backgroundColor: isFemale ? "#008040" : "#124182" }}>Female</Button>
+          </Grid.Col>
+        </Grid>
         <form>
-          <div>
-            Enter your height:
-            <div>
-              <label>Feet:
-                <input 
-                  type="text" 
-                  onChange={(e) => setFeet(e.target.value)}/>
-              </label>
-              <label>Inches:
-                <input 
-                  type="text" 
-                  onChange={(e) => setInches(e.target.value)}/>
-              </label>
-            </div>
-          </div>
+          <Stack pt={20} pb={10}>
+            <Card>
+              Enter your height:
+              <Grid>
+                <Grid.Col>
+                  <NumberInput value={feet} onChange={setFeet} label='Feet' defaultValue={''} />
+                </Grid.Col>
+                <Grid.Col>
+                  <NumberInput value={inches} onChange={setInches} label='Inches' defaultValue={''} />
+                </Grid.Col>
+              </Grid>
+            </Card>
+          </Stack>
         </form>
-        <button onClick={() => handlePress(feet, inches)} className="button" style={{verticalAlign:"middle"}}><span>Where am I tall? </span></button>
+        <Button style={{ backgroundColor: "#124182"}} onClick={() => handlePress(feet, inches)}>Where am I tall?</Button>
         <div>
-          {countriesYouAreTaller.length > 0 && 
-           <div>You are tall somewhere!</div>}
-            
-        {/* {countriesYouAreTaller.length > 0 &&
+          {countriesYouAreTaller.length > 0 ?
+            <div>You are tall somewhere!</div> : <div>You are not tall anywhere...</div>}
+          {/* {countriesYouAreTaller.length > 0 &&
             countriesYouAreTaller.map((country: any, index: number) => {
               let countryFullName = mappedalpha2.find(a => a?.alpha2 === country)?.['Country Name']
               return <p key={index}>{countryFullName}</p>
@@ -92,12 +96,13 @@ function App() {
             return (`
               <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
               Avg Height: <i>${avgHeight}</i>
-          `)} }
+          `)
+          }}
           onPolygonHover={setHoverD}
           polygonsTransitionDuration={300}
         />
       </header>
-    </div>
+    </Stack>
   );
 }
 
