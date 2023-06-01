@@ -1,7 +1,7 @@
 {
   "name": "where-are-you-tall",
   "version": "0.1.0",
-  "homepage": "https://reddickda.github.io/where-are-you-tall",
+  "homepage": "https://whereareyoutall.com",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.0",
